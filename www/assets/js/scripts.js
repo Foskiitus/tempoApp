@@ -243,7 +243,7 @@ function tempoNextDays(list) {
     let diaSemana = getWeekDay(day);
     weekDays.push(diaSemana);
   }
-  console.log(weekDays);
+  // console.log(weekDays);
 
   let diasSemana;
   for (const key in days) {
@@ -264,8 +264,8 @@ function tempoNextDays(list) {
         icons.push(iconFreq);
       }
     }
-    console.log(diasSemana);
-    console.log(icons);
+    // console.log(diasSemana);
+    // console.log(icons);
     /* GET THE MOST FREQUENT ICON OF DAY */
     if (icons.length === 1) {
       item = icons[0];
@@ -284,14 +284,13 @@ function tempoNextDays(list) {
         m = 0;
       }
     }
-    console.log(item);
+    // console.log(item);
     descTempo = getWeatherDesc(item);
     icon = getWeatherIconForList(item);
 
     //     let icon = getWeatherIcon(weatherIcon);
     /* GET THE MOST FREQUENT ICON OF DAY */
     let minimo = Math.min(...minTemp);
-    console.log();
     let maximo = Math.max(...maxTemp);
     lines.innerHTML += `
       <div class="estado-dias hoverable">
