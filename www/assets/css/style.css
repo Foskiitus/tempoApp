@@ -278,34 +278,80 @@ input:focus {
   margin-top: 0;
   margin-left: 0;
 }
+.estado-dias .img-background .moon {
+  /* 01n */
+  display: block;
+  background-image: url("../img/icons/night.svg");
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: -19px -19px;
+}
 .estado-dias .img-background .sun {
+  /* 01d */
   display: block;
   background-image: url("../img/icons/day.svg");
   background-repeat: no-repeat;
   background-size: 100px;
   background-position: -19px -19px;
 }
-.estado-dias .img-background .trevoada {
+
+.estado-dias .img-background .pouconublado {
+  /* 02n/d */
   display: block;
-  background-image: url("../img/icons/thunder.svg");
+  background-image: url("../img/icons/cloudy-day-1.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+  background-position: 5px 5px;
+}
+.estado-dias .img-background .parcialnublado {
+  /* 03n/d */
+  display: block;
+  background-image: url("../img/icons/cloudy-day-3.svg");
   background-repeat: no-repeat;
   background-size: 61px;
 }
-.estado-dias .img-background .nublado {
+.estado-dias .img-background .muitonublado {
+  /* 04d/n */
   display: block;
   background-image: url("../img/icons/cloudy.svg");
   background-repeat: no-repeat;
   background-size: 61px;
 }
-.estado-dias .img-background .chuva {
+.estado-dias .img-background .chuviscos {
+  /* 09n/d */
   display: block;
-  background-image: url("../img/icons/rainy-7.svg");
+  background-image: url("../img/icons/rainy-1.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+  background-position: 5px 5px;
+}
+.estado-dias .img-background .chuva {
+  /* 10n/d */
+  display: block;
+  background-image: url("../img/icons/rainy-2.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+  background-position: 5px 5px;
+}
+.estado-dias .img-background .trevoada {
+  /* 11n/d */
+  display: block;
+  background-image: url("../img/icons/thunder.svg");
   background-repeat: no-repeat;
   background-size: 61px;
 }
-.estado-dias .img-background .chuviscos {
+.estado-dias .img-background .neve {
+  /* 13n/d */
   display: block;
-  background-image: url("../img/icons/rainy-1.svg");
+  background-image: url("../img/icons/snowy-6.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+  background-position: 5px 5px;
+}
+.estado-dias .img-background .muitonublado {
+  /* 50n/d */
+  display: block;
+  background-image: url("../img/icons/cloudy-day-1.svg");
   background-repeat: no-repeat;
   background-size: 61px;
   background-position: 5px 5px;

@@ -23,13 +23,13 @@ async function getWeatherByLocation(city) {
   const daysWeather = await respDays.json();
   //console log
   // console.log(respData);
-  console.log(daysWeather);
+  // console.log(daysWeather);
   // Fim console log
   addWeatherToPage(respData);
   populateCityName(respData.name);
   populateEstado(respData.weather[0].icon);
   hoursWeather(daysWeather);
-  // tempoNextDays(daysWeather);
+  tempoNextDays(daysWeather);
   salvarCidade(city);
 }
 //caputura nome ciade
@@ -135,7 +135,7 @@ function hoursWeather(list) {
 
 function getWeatherIcon(icon) {
   if (icon === "01n") {
-    tempo = `./assets/img/icons/night.svg`; 
+    tempo = `./assets/img/icons/night.svg`;
   } else if (icon === "01d") {
     tempo = `./assets/img/icons/day.svg`;
   } else if (icon === "02n" || icon === "02d") {
@@ -181,67 +181,179 @@ function getWeatherDesc(icon) {
   }
   return tempo;
 }
+
+function getWeekDay(day) {
+  let weekDay;
+  if (day === 0) weekDay = "Domingo";
+  if (day === 1) weekDay = "Segunda";
+  if (day === 2) weekDay = "Terça";
+  if (day === 3) weekDay = "Quarta";
+  if (day === 4) weekDay = "Quinta";
+  if (day === 5) weekDay = "Sexta";
+  if (day === 6) weekDay = "Sabado";
+  return weekDay;
+}
+
+function getWeatherIconForList(icon) {
+  if (icon === "01n") {
+    tempo = `moon`;
+  } else if (icon === "01d") {
+    tempo = `sun`;
+  } else if (icon === "02n" || icon === "02d") {
+    tempo = `pouconublado`;
+  } else if (icon === "03n" || icon === "03d") {
+    tempo = `parcialnublado`;
+  } else if (icon === "04n" || icon === "04d") {
+    tempo = `muitonublado`;
+  } else if (icon === "09n" || icon === "09d") {
+    tempo = `chuviscos`;
+  } else if (icon === "10n" || icon === "10d") {
+    tempo = `chuva`;
+  } else if (icon === "11n" || icon === "11d") {
+    tempo = `trevoada`;
+  } else if (icon === "13n" || icon === "13d") {
+    tempo = `neve`;
+  } else if (icon === "50n" || icon === "50d") {
+    tempo = `muitonublado`;
+  }
+  return tempo;
+}
 /************      TESTES        *******************/
 /* Lista estado-dias*/
-
 function tempoNextDays(list) {
-  Date.prototype.addDays = function(days) {
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-}
-
-let date = new Date();
-let days = [];
-for (let i = 0; i < 7; i++) {
-    let day = String(date.addDays(i).getDate()).padStart(2, "0");
-    let mm = String(date.addDays(i).getMonth()+1).padStart(2, "0");
-    let yyyy = String(date.addDays(i).getFullYear())
-    days.push(yyyy + '-' + mm + '-' + day);
-}
-
   const lines = document.getElementById("lines");
   lines.innerHTML = "";
   const valueList = list.list;
 
-  for (const key in valueList) {
-    const dataHora = valueList[key].dt_txt.split(" ");
-    const horaCompleta = dataHora[1].split(":");
-    const data = horaCompleta[1];
-    if(data === days[0]){
-      
-    }
-    const weatherIcon = valueList[key].weather[0].icon;
-    let icon = getWeatherIcon(weatherIcon);
-    // console.log(valueList[key].weather);
-    let diaSemana;
-    let minTemp;
-    let maxTemp;
-    estadoCard.innerHTML += `
-  <div class="estado-dias hoverable">
-  <div class="img-background">
-    <i class="imgtempo sun"> </i>
-  </div>
-  <p class="dia-tempo">
-    <span class="titulo-dia">${diaSemana}</span>
-    <span class="estadotempo">Sol</span>
-  </p>
-  <p class="maxmin">
-    <span class="max">Max. 24ºC</span><br /><span class="min"
-      >Min. 15ºC</span 
-    >
-  </p>
+  Date.prototype.addDays = function (days) {
+    let date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
 
-  <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-</div>
-  <div class="mini-cards">
-          <img src="${icon}" alt="" />
-          <p class="temp">${temp}ºC</p>
-          <p class="hora">${hora}H</p>
+  let date = new Date();
+  let days = [];
+  let weekDays = [];
+  for (let i = 0; i <= 5; i++) {
+    let dd = String(date.addDays(i).getDate()).padStart(2, "0");
+    let mm = String(date.addDays(i).getMonth() + 1).padStart(2, "0");
+    let yyyy = String(date.addDays(i).getFullYear());
+    let day = Number(date.addDays(i).getDay());
+    days.push(yyyy + "-" + mm + "-" + dd);
+    let diaSemana = getWeekDay(day);
+    weekDays.push(diaSemana);
+  }
+  console.log(weekDays);
+
+  let diasSemana;
+  for (const key in days) {
+    let minTemp = [];
+    let maxTemp = [];
+    let icons = [];
+    let dia = days[key];
+    for (const i in valueList) {
+      const dataHora = valueList[i].dt_txt.split(" ");
+      const data = dataHora[0];
+      diasSemana = weekDays[key];
+      if (dia === data) {
+        let iconFreq = valueList[i].weather[0].icon;
+        let min = valueList[i].main.temp_min.toFixed(0);
+        let max = valueList[i].main.temp_max.toFixed(0);
+        minTemp.push(min);
+        maxTemp.push(max);
+        icons.push(iconFreq);
+      }
+    }
+    console.log(diasSemana);
+    console.log(icons);
+    /* GET THE MOST FREQUENT ICON OF DAY */
+    if (icons.length === 1) {
+      item = icons[0];
+    } else {
+      var mf = 1;
+      var m = 0;
+      var item;
+      for (var i = 0; i < icons.length; i++) {
+        for (var j = i; j < icons.length; j++) {
+          if (icons[i] == icons[j]) m++;
+          if (mf < m) {
+            mf = m;
+            item = icons[i];
+          }
+        }
+        m = 0;
+      }
+    }
+    console.log(item);
+    descTempo = getWeatherDesc(item);
+    icon = getWeatherIconForList(item);
+
+    //     let icon = getWeatherIcon(weatherIcon);
+    /* GET THE MOST FREQUENT ICON OF DAY */
+    let minimo = Math.min(...minTemp);
+    console.log();
+    let maximo = Math.max(...maxTemp);
+    lines.innerHTML += `
+      <div class="estado-dias hoverable">
+        <div class="img-background">
+          <i class="imgtempo ${icon}"> </i> 
         </div>
-  `;
+        <p class="dia-tempo">
+          <span class="titulo-dia">${diasSemana}</span>
+          <span class="estadotempo">${descTempo}</span>
+        </p>
+        <p class="maxmin">
+          <span class="max">Max. ${maximo}ºC</span><br /><span class="min"
+            >Min. ${minimo}ºC</span
+          >
+        </p>
+
+        <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
+      </div>
+    `;
   }
 }
+
+// function tempoNextDays(list) {
+//   console.log(days);
+//   console.log(weekDays);
+
+//   for (const key in valueList) {
+//     const dataHora = valueList[key].dt_txt.split(" ");
+//     const horaCompleta = dataHora[1].split(":");
+//     const data = dataHora[0];
+//     let minTemp = [];
+//     let maxTemp = [];
+//     if (data === days[0]) {
+//       let min = valueList[key].main.temp_min.toFixed(0);
+//       let max = valueList[key].main.temp_max.toFixed(0);
+//       minTemp.push(min);
+//       maxTemp.push(max);
+//       console.log(minTemp);
+//     }
+//     const weatherIcon = valueList[key].weather[0].icon;
+//     let icon = getWeatherIcon(weatherIcon);
+//     // console.log(valueList[key].weather);
+//     let diaSemana;
+//     lines.innerHTML += `
+//     <div class="estado-dias hoverable">
+//       <div class="img-background">
+//         <i class="imgtempo sun"> </i>
+//       </div>
+//       <p class="dia-tempo">
+//         <span class="titulo-dia">${diaSemana}</span>
+//         <span class="estadotempo">Sol</span>
+//       </p>
+//       <p class="maxmin">
+//         <span class="max">Max. 24ºC</span><br /><span class="min"
+//           >Min. 15ºC</span
+//         >
+//       </p>
+
+//       <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
+//     </div>
+//   `;
+//   }
 
 /************      FIM TESTES        *******************/
 
