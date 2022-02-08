@@ -1,0 +1,526 @@
+/* Weather Icons https://www.amcharts.com/free-animated-svg-weather-icons/ */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
+@import "https://unpkg.com/open-props";
+:root {
+  font-family: "Poppins", sans-serif;
+  --gap-05: 0.5rem;
+  --gap-1: 1rem;
+  --gap-2: 2rem;
+  --gap-3: 3rem;
+  --gap-4: 4rem;
+  --gap-5: 5rem;
+  --primary: #ffffff;
+  --secundary: #03a9f4;
+  --tertiary: #f4f4f4;
+  --icon-background: #d2dfff;
+  --icon-background-dark: #26344e;
+  --primary-dark: #232323;
+  --secundary-dark: #0079b1;
+  --tertiary-dark: #121212;
+  --text1: #000000;
+  --text1-darkmode: #ffffff;
+  --text2-darkmode: #cfc6c7;
+  --text-red: #ff0000;
+  --text-red-dark: #e91b0e;
+  --text-blue: #04c3ff;
+  --text-blue-dark: #03629a;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-y: scroll;
+  background: var(--tertiary);
+  margin: 0;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  height: 30px;
+  margin: 0 auto;
+  margin-bottom: var(--gap-1);
+  top: 24px;
+  z-index: 2;
+}
+.search > form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  background-color: var(--primary);
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  padding: 1rem;
+  min-width: 300px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.hoverable {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: all 0.55s ease-in-out;
+  -o-transition: all 0.55s ease-in-out;
+  transition: all 0.55s ease-in-out;
+}
+.hoverable:hover {
+  -webkit-box-shadow: 0 8px 17px 0 rgb(0 0 0 / 20%),
+    0 6px 20px 0 rgb(0 0 0 / 19%);
+  box-shadow: 0 8px 17px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  -webkit-transition: all 0.55s ease-in-out;
+  -o-transition: all 0.55s ease-in-out;
+  transition: all 0.55s ease-in-out;
+}
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  padding: 0;
+  margin: 0;
+  background: var(--secundary);
+}
+.top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 50vh;
+  top: var(--gap-1);
+  margin-left: var(--gap-2);
+  margin-right: var(--gap-2);
+  position: fixed;
+  z-index: 1;
+}
+.text-info {
+  grid-column-start: 1;
+  justify-content: right;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+.text-info > .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  float: right;
+}
+
+.cont-nome {
+  width: 100%;
+}
+.city-name {
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 25px;
+  width: 100%;
+  margin: 0;
+  color: var(--primary);
+  margin-right: var(--gap-1);
+}
+
+.text {
+  width: 100%;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 0;
+}
+.text > .estado {
+  margin-right: var(--gap-1);
+}
+.text > .temp {
+  margin-right: var(--gap-1);
+}
+
+.card {
+  position: relative;
+  left: 0%;
+  right: 0%;
+  top: 50vh;
+  bottom: 0%;
+  background: var(--tertiary);
+  border-radius: 30px 30px 0px 0px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  padding: var(--gap-1);
+  padding-top: 30px;
+}
+.info {
+  grid-column-start: 2;
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+.info .img-tempo {
+  min-width: 209px;
+  max-width: 305px;
+  width: 100%;
+  height: auto;
+}
+
+.info p {
+  justify-content: center;
+  text-align: center;
+}
+
+.estadohoras {
+  display: grid;
+  gap: var(--gap-05);
+  grid-auto-flow: column;
+  grid-auto-columns: 21%;
+
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.estadohoras .mini-cards {
+  display: grid;
+  background: var(--primary);
+  padding: var(--gap-05);
+  width: 78px;
+  height: 107px;
+  border-radius: 15px;
+  margin: var(--gap-1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.mini-cards > img {
+  inline-size: 100%;
+  align-items: stretch;
+  max-width: 50px;
+  max-height: 50px;
+  justify-content: center;
+  margin: 0 auto;
+  display: block;
+}
+.mini-cards .temp {
+  position: relative;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+  color: #201c1c;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+}
+.mini-cards .hora {
+  margin-top: 4px;
+  padding-top: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #494343;
+  text-align: center;
+}
+.snaps-inline {
+  scroll-snap-type: inline mandatory;
+  scroll-padding-inline: var(--gap-05);
+}
+.snaps-inline > * {
+  scroll-snap-align: start;
+}
+.lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.estado-dias {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: var(--primary);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 15px;
+  margin: 5px;
+}
+.estado-dias .img-background {
+  border-radius: 50%;
+  width: 61px;
+  height: 61px;
+  margin-left: 15px;
+  margin-right: 15px;
+  background-color: var(--icon-background);
+  overflow: hidden;
+}
+.estado-dias .imgtempo {
+  width: 100px;
+  height: 100px;
+  margin-top: 0;
+  margin-left: 0;
+}
+.estado-dias .img-background .sun {
+  display: block;
+  background-image: url("../img/icons/day.svg");
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: -19px -19px;
+}
+.estado-dias .img-background .trevoada {
+  display: block;
+  background-image: url("../img/icons/thunder.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+}
+.estado-dias .img-background .nublado {
+  display: block;
+  background-image: url("../img/icons/cloudy.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+}
+.estado-dias .img-background .chuva {
+  display: block;
+  background-image: url("../img/icons/rainy-7.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+}
+.estado-dias .img-background .chuviscos {
+  display: block;
+  background-image: url("../img/icons/rainy-1.svg");
+  background-repeat: no-repeat;
+  background-size: 61px;
+  background-position: 5px 5px;
+}
+.estado-dias .dia-tempo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  margin-right: 15px;
+}
+.estado-dias p {
+  line-height: 20px;
+}
+.estado-dias p .titulo-dia {
+  font-size: 20px;
+  font-weight: 400;
+  text-align: left;
+  column-width: auto;
+}
+
+.estado-dias p .estadotempo {
+  font-size: 14px;
+  font-weight: 300;
+  text-align: left;
+}
+
+.estado-dias .maxmin {
+  right: 0;
+  justify-content: right;
+  font-size: 14px;
+  margin-right: 10px;
+  font-weight: 300;
+  margin-left: auto;
+}
+.estado-dias .maxmin .max {
+  color: var(--text-red);
+}
+.estado-dias .maxmin .min {
+  color: var(--text-blue);
+}
+
+.estado-dias .imgright {
+  float: right;
+  padding-right: 15px;
+}
+
+@media (max-width: 600px) {
+  .top {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .city-name {
+    font-size: 25px;
+    line-height: 30px;
+  }
+}
+@media (min-width: 600px) {
+  .estadohoras {
+    grid-auto-columns: auto;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--tertiary);
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: var(--text1);
+    opacity: 1;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: var(--text1);
+    opacity: 1;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: var(--text1);
+    opacity: 1;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--text1);
+    opacity: 1;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--text1);
+    opacity: 1;
+  }
+
+  ::placeholder {
+    /* Most modern browsers support this now. */
+    color: var(--text1);
+    opacity: 1;
+  }
+  input {
+    background-color: var(--primary);
+    color: var(--text1);
+    opacity: 1;
+  }
+  .background {
+    background: var(--secundary);
+  }
+  .estadohoras .mini-cards {
+    background: var(--primary);
+    color: var(--text1);
+  }
+  .estado-dias .img-background {
+    background-color: var(--icon-background);
+  }
+  .estado-dias {
+    background: var(--primary);
+    color: var(--text1);
+  }
+  .city-name {
+    color: var(--primary);
+    color: var(--text1);
+  }
+  .card {
+    background: var(--tertiary);
+    color: var(--text1);
+  }
+  .mini-cards > .temp {
+    color: var(--text1);
+  }
+  .mini-cards > .hora {
+    color: var(--text2);
+  }
+  .estado-dias .maxmin .max {
+    color: var(--text-red);
+  }
+  .estado-dias .maxmin .min {
+    color: var(--text-blue);
+  }
+  .imgright {
+    filter: brightness(0) invert(1);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--tertiary-dark);
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+
+  ::placeholder {
+    /* Most modern browsers support this now. */
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  input {
+    background-color: var(--primary-dark);
+    color: var(--text1-darkmode);
+    opacity: 1;
+  }
+  .background {
+    background: var(--secundary-dark);
+  }
+  .estadohoras .mini-cards {
+    background: var(--primary-dark);
+    color: var(--text1-darkmode);
+  }
+  .estado-dias .img-background {
+    background-color: var(--icon-background-dark);
+  }
+  .estado-dias {
+    background: var(--primary-dark);
+    color: var(--text1-darkmode);
+  }
+  .city-name {
+    color: var(--primary-dark);
+    color: var(--text1-darkmode);
+  }
+  .card {
+    background: var(--tertiary-dark);
+    color: var(--text1-darkmode);
+  }
+  .mini-cards > .temp {
+    color: var(--text1-darkmode);
+  }
+  .mini-cards > .hora {
+    color: var(--text2-darkmode);
+  }
+  .estado-dias .maxmin .max {
+    color: var(--text-red-dark);
+  }
+  .estado-dias .maxmin .min {
+    color: var(--text-blue-dark);
+  }
+  .imgright {
+    filter: brightness(0) invert(1);
+  }
+}
