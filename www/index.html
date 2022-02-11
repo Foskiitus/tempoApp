@@ -4,12 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tempo</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.es.gov.br/fonts/font-awesome/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="./assets/fontawesome/css/all.css" />
   </head>
   <body>
     <div class="background">
@@ -33,6 +30,7 @@
           <p class="text">
             <span class="estado"></span>
             <span class="temp"></span>
+            <span class="prob"><i class="fas fa-umbrella"></i></span>
           </p>
         </div>
 
@@ -50,91 +48,42 @@
             <img src="./assets/img/icons/rainy-1.svg" alt="" />
             <p class="temp">16ºC</p>
             <p class="hora">1H</p>
+            <p class="dia"><i class="far fa-calendar-alt"></i></p>
           </div>
         </div>
         <div class="lines" id="lines">
-          <div class="estado-dias hoverable">
-            <div class="img-background">
-              <i class="imgtempo sun"> </i>
-            </div>
-            <p class="dia-tempo">
-              <span class="titulo-dia">Sabado</span>
-              <span class="estadotempo">Sol</span>
-            </p>
-            <p class="maxmin">
-              <span class="max">Max. 24ºC</span><br /><span class="min"
-                >Min. 15ºC</span
-              >
-            </p>
-
-            <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-          </div>
-
-          <div class="estado-dias hoverable">
-            <div class="img-background">
-              <i class="imgtempo trevoada"> </i>
-            </div>
-            <p class="dia-tempo">
-              <span class="titulo-dia">Domingo</span>
-              <span class="estadotempo">Trevoada</span>
-            </p>
-            <p class="maxmin">
-              <span class="max">Max. 24ºC</span><br /><span class="min"
-                >Min. 15ºC</span
-              >
-            </p>
-
-            <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-          </div>
-          <div class="estado-dias hoverable">
-            <div class="img-background">
-              <i class="imgtempo nublado"> </i>
-            </div>
-            <p class="dia-tempo">
-              <span class="titulo-dia">Segunda</span>
-              <span class="estadotempo">Nublado</span>
-            </p>
-            <p class="maxmin">
-              <span class="max">Max. 24ºC</span><br /><span class="min"
-                >Min. 15ºC</span
-              >
-            </p>
-            <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-          </div>
-          <div class="estado-dias hoverable">
-            <div class="img-background">
-              <i class="imgtempo chuva"> </i>
-            </div>
-            <p class="dia-tempo">
-              <span class="titulo-dia">Terça</span>
-              <span class="estadotempo">Chuva</span>
-            </p>
-            <p class="maxmin">
-              <span class="max">Max. 24ºC</span><br /><span class="min"
-                >Min. 15ºC</span
-              >
-            </p>
-            <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-          </div>
-          <div class="estado-dias hoverable">
-            <div class="img-background">
-              <i class="imgtempo chuviscos"> </i>
-            </div>
-            <p class="dia-tempo">
-              <span class="titulo-dia">Quarta</span>
-              <span class="estadotempo">Chuviscos</span>
-            </p>
-            <p class="maxmin">
-              <span class="max">Max. 24ºC</span><br /><span class="min"
-                >Min. 15ºC</span
-              >
-            </p>
-            <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
+          <div class="accordion" id="accordion">
+            <!--   Auto Filled    -->
           </div>
         </div>
       </div>
     </div>
 
     <script src="./assets/js/scripts.js"></script>
+    <script src="./assets/js/jquery-3.6.0.min.js"></script>
+    <script>
+      // setInterval(accordion, 200);
+
+      // setInterval(accordion, 400);
+      // function accordion() {
+      //   /*  Accordion  */
+      //   var acc = document.getElementsByClassName("accordion");
+      //   var i;
+
+      //   for (i = 0; i < acc.length; i++) {
+      //     acc[i].addEventListener("click", function () {
+      //       var rotate = this.querySelector(".rotate");
+      //       console.log(rotate);
+      //       this.classList.toggle("active");
+      //       var panel = this.nextElementSibling;
+      //       if (panel.style.maxHeight) {
+      //         panel.style.maxHeight = null;
+      //       } else {
+      //         panel.style.maxHeight = panel.scrollHeight + "px";
+      //       }
+      //     });
+      //   }
+      // }
+    </script>
   </body>
 </html>

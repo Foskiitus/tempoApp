@@ -3,6 +3,7 @@
 @import "https://unpkg.com/open-props";
 :root {
   font-family: "Poppins", sans-serif;
+  --gap-25: 0.25rem;
   --gap-05: 0.5rem;
   --gap-1: 1rem;
   --gap-2: 2rem;
@@ -13,16 +14,18 @@
   --secundary: #03a9f4;
   --tertiary: #f4f4f4;
   --icon-background: #d2dfff;
+  --text-red: #ff0000;
+  --text1: #000000;
+  --text-blue: #04c3ff;
+
+  /* Dark Mode */
   --icon-background-dark: #26344e;
   --primary-dark: #232323;
   --secundary-dark: #0079b1;
   --tertiary-dark: #121212;
-  --text1: #000000;
   --text1-darkmode: #ffffff;
   --text2-darkmode: #cfc6c7;
-  --text-red: #ff0000;
   --text-red-dark: #e91b0e;
-  --text-blue: #04c3ff;
   --text-blue-dark: #03629a;
 }
 * {
@@ -65,7 +68,14 @@ input {
 input:focus {
   outline: none;
 }
-
+.back {
+  border: none;
+  background-color: transparent;
+  top: 15px;
+  left: 15px;
+  position: fixed;
+  font-size: 1.25rem;
+}
 .hoverable {
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -145,10 +155,13 @@ input:focus {
   margin: 0;
 }
 .text > .estado {
-  margin-right: var(--gap-1);
+  color: var(--text1-darkmode);
 }
 .text > .temp {
-  margin-right: var(--gap-1);
+  color: var(--text1-darkmode);
+}
+.text > .prob {
+  color: var(--text1-darkmode);
 }
 
 .card {
@@ -196,7 +209,7 @@ input:focus {
 .estadohoras .mini-cards {
   display: grid;
   background: var(--primary);
-  padding: var(--gap-05);
+  padding: var(--gap-25);
   width: 78px;
   height: 107px;
   border-radius: 15px;
@@ -221,12 +234,28 @@ input:focus {
   color: #201c1c;
   padding-top: 0;
   padding-bottom: 0;
-  margin-top: 0;
+  margin-top: -10px;
   margin-bottom: 0;
   text-align: center;
 }
 .mini-cards .hora {
-  margin-top: 4px;
+  margin: 0;
+  padding-top: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #494343;
+  text-align: center;
+}
+.mini-cards > .dia > i {
+  padding-right: 5px;
+}
+.mini-cards .dia {
+  margin: 0;
+  margin-top: var(--gap-25);
   padding-top: 0;
   font-style: normal;
   font-weight: normal;
@@ -249,6 +278,9 @@ input:focus {
   flex-direction: column;
   justify-content: center;
   width: 100%;
+}
+.container {
+  padding-top: var(--gap-1);
 }
 
 .estado-dias {
@@ -398,6 +430,135 @@ input:focus {
   padding-right: 15px;
 }
 
+.label {
+  position: relative;
+  color: #444;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  z-index: 4;
+}
+
+.active,
+.label:hover {
+  z-index: 4;
+}
+
+.container .content {
+  display: grid;
+  grid-template-areas:
+    "left right"
+    "micro micro";
+  font-size: 13px;
+  height: 0;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  border-radius: 0px 0px 15px 15px;
+  z-index: 3;
+  margin-top: -10px;
+  margin-left: 15px;
+  margin-right: 7px;
+  transition: 0.5s;
+}
+
+.accordion .container.active .content {
+  height: 250px;
+  padding: var(--gap-1);
+}
+
+.rotate {
+  -moz-transition: all 2s linear;
+  -webkit-transition: all 2s linear;
+  transition: all 2s linear;
+}
+
+.rotate.down {
+  -ms-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.content .left {
+  grid-area: left;
+}
+
+.content .right {
+  grid-area: right;
+}
+
+.content > .cards {
+  padding-top: var(--gap-05);
+  grid-area: micro;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  gap: 5px;
+  justify-content: space-around;
+}
+
+.content > .cards > .micro-cards {
+  display: grid;
+  width: 38px;
+  border-radius: 15px;
+  margin-left: -00.25rem;
+}
+.micro-cards > img {
+  inline-size: 100%;
+  align-items: stretch;
+  max-width: 50px;
+  max-height: 50px;
+  justify-content: center;
+  margin: 0 auto;
+  display: block;
+}
+.micro-cards .temp {
+  position: relative;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #201c1c;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: -10px;
+  margin-bottom: 0;
+  text-align: center;
+}
+.micro-cards .hora {
+  margin: 0;
+  padding-top: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #494343;
+  text-align: center;
+}
+.micro-cards > .dia > i {
+  padding-right: 5px;
+}
+.micro-cards .dia {
+  margin: 0;
+  margin-top: var(--gap-25);
+  padding-top: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #494343;
+  text-align: center;
+}
+
 @media (max-width: 600px) {
   .top {
     grid-template-columns: repeat(1, 1fr);
@@ -413,7 +574,7 @@ input:focus {
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   body {
     background: var(--tertiary);
   }
@@ -467,6 +628,10 @@ input:focus {
     background: var(--primary);
     color: var(--text1);
   }
+  .estado-dias {
+    background: var(--primary);
+    color: var(--text1);
+  }
   .city-name {
     color: var(--primary);
     color: var(--text1);
@@ -475,6 +640,15 @@ input:focus {
     background: var(--tertiary);
     color: var(--text1);
   }
+
+  .container .content {
+    background-color: var(--primary);
+  }
+
+  .mini-cards > .dia {
+    color: var(--text1);
+  }
+
   .mini-cards > .temp {
     color: var(--text1);
   }
@@ -486,9 +660,6 @@ input:focus {
   }
   .estado-dias .maxmin .min {
     color: var(--text-blue);
-  }
-  .imgright {
-    filter: brightness(0) invert(1);
   }
 }
 
@@ -554,6 +725,13 @@ input:focus {
     background: var(--tertiary-dark);
     color: var(--text1-darkmode);
   }
+  .container .content {
+    background-color: var(--primary-dark);
+  }
+  .mini-cards > .dia {
+    color: var(--text1-darkmode);
+  }
+
   .mini-cards > .temp {
     color: var(--text1-darkmode);
   }
@@ -561,12 +739,22 @@ input:focus {
     color: var(--text2-darkmode);
   }
   .estado-dias .maxmin .max {
-    color: var(--text-red-dark);
+    color: var(--text-red-dark) !important;
   }
   .estado-dias .maxmin .min {
     color: var(--text-blue-dark);
   }
   .imgright {
     filter: brightness(0) invert(1);
+  }
+  .micro-cards > .dia {
+    color: var(--text1-darkmode);
+  }
+
+  .micro-cards > .temp {
+    color: var(--text1-darkmode);
+  }
+  .micro-cards > .hora {
+    color: var(--text2-darkmode);
   }
 }

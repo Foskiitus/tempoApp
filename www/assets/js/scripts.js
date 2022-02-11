@@ -1,16 +1,15 @@
 // 7a2be0d69c2a36ca11b9c1e0b03da7a1
 const apikey = "7a2be0d69c2a36ca11b9c1e0b03da7a1";
-
+const title = document.title;
 const mainTemp = document.querySelector(".text .temp");
 const form = document.getElementById("form");
 const search = document.getElementById("search");
-
+var respData;
 const urlNow = (city) =>
   `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apikey}`;
 
 const urlHours = (city) =>
   `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apikey}`;
-
 async function getWeatherByLocation(city) {
   const resp = await fetch(urlNow(city), {
     origin: "cors",
@@ -19,32 +18,48 @@ async function getWeatherByLocation(city) {
     origin: "cors",
   });
 
-  const respData = await resp.json();
+  respData = await resp.json();
   const daysWeather = await respDays.json();
-  //console log
-  // console.log(respData);
-  // console.log(daysWeather);
-  // Fim console log
   addWeatherToPage(respData);
   populateCityName(respData.name);
   populateEstado(respData.weather[0].icon);
   hoursWeather(daysWeather);
   tempoNextDays(daysWeather);
   salvarCidade(city);
+  getProbabilidadeChuva(daysWeather.list[0].pop);
 }
-//caputura nome ciade
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+// Convert Timestamp to Date
+function timestampToDate(t) {
+  var sec = t;
+  var date = new Date(sec * 1000);
+  var timestr = date.toLocaleTimeString();
+  return timestr;
+}
 
-  const city = search.value;
+// get probabilidade de chuva
 
-  if (city) {
-    getWeatherByLocation(city);
-  }
-});
+function getProbabilidadeChuva(proba) {
+  proba = proba * 100;
+  const prob = document.querySelector(".text > .prob");
+  prob.innerHTML = '<i class="fas fa-umbrella"></i>';
+  prob.innerHTML += " " + proba + "%";
+}
+if (form === null) {
+} else {
+  //caputura nome ciade
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const city = search.value;
+
+    if (city) {
+      hideKeyboard();
+      getWeatherByLocation(city);
+    }
+  });
+}
 // Icon grande topo + Descrição
 function populateEstado(icon) {
-  // console.log(icon);
   const estado = document.querySelector(".text .estado");
   const mainImg = document.querySelector(".top > .info");
   let desc = getWeatherDesc(icon);
@@ -118,22 +133,51 @@ function hoursWeather(list) {
   for (const key in valueList) {
     const dataHora = valueList[key].dt_txt.split(" ");
     const horaCompleta = dataHora[1].split(":");
+    const data = dataHora[0];
+    const dia = data.split("-");
     const hora = horaCompleta[0];
     const temp = valueList[key].main.temp.toFixed(0);
     const weatherIcon = valueList[key].weather[0].icon;
-    // console.log(valueList[key].weather);
-    let icon = getWeatherIcon(weatherIcon);
+    const icon = getWeatherIcon(weatherIcon);
     estadoCard.innerHTML += `
     <div class="mini-cards">
-            <img src="${icon}" alt="" />
-            <p class="temp">${temp}ºC</p>
-            <p class="hora">${hora}H</p>
-          </div>
+      <p class="dia"><i class="far fa-calendar-alt"></i>${dia[2]}/${dia[1]}</p>
+      <img src="${icon}" alt="" />
+      <p class="temp">${temp}ºC</p>
+      <p class="hora">${hora}H</p>
+    </div>
     `;
   }
 }
 
+/*    Get Estado do tempo por dia      */
+// function hoursWeatherByDay(list, dia) {
+//   const Card = document.querySelector(".content .cards");
+//   Card.innerHTML = "";
+//   const valueList = list.list;
+
+//   for (const key in valueList) {
+//     const dataHora = valueList[key].dt_txt.split(" ");
+//     const horaCompleta = dataHora[1].split(":");
+//     const data = dataHora[0];
+//     const dia = data.split("-");
+//     const hora = horaCompleta[0];
+//     const temp = valueList[key].main.temp.toFixed(0);
+//     const weatherIcon = valueList[key].weather[0].icon;
+//     const icon = getWeatherIcon(weatherIcon);
+//     Card.innerHTML += `
+//     <div class="mini-cards">
+//       <p class="dia"><i class="far fa-calendar-alt"></i>${dia[2]}/${dia[1]}</p>
+//       <img src="${icon}" alt="" />
+//       <p class="temp">${temp}ºC</p>
+//       <p class="hora">${hora}H</p>
+//     </div>
+//     `;
+//   }
+// }
+
 function getWeatherIcon(icon) {
+  let tempo;
   if (icon === "01n") {
     tempo = `./assets/img/icons/night.svg`;
   } else if (icon === "01d") {
@@ -155,9 +199,11 @@ function getWeatherIcon(icon) {
   } else if (icon === "50n" || icon === "50d") {
     tempo = `./assets/img/icons/cloudy-day-1.svg`;
   }
+
   return tempo;
 }
 function getWeatherDesc(icon) {
+  let tempo;
   if (icon === "01n") {
     tempo = `Céu Limpo`;
   } else if (icon === "01d") {
@@ -165,7 +211,7 @@ function getWeatherDesc(icon) {
   } else if (icon === "02n" || icon === "02d") {
     tempo = `Céu Pouco Nublado`;
   } else if (icon === "03n" || icon === "03d") {
-    tempo = `Céu Parcialmente Nublado`;
+    tempo = `Parcialmente Nublado`;
   } else if (icon === "04n" || icon === "04d") {
     tempo = `Céu Muito Nublado`;
   } else if (icon === "09n" || icon === "09d") {
@@ -195,6 +241,7 @@ function getWeekDay(day) {
 }
 
 function getWeatherIconForList(icon) {
+  let tempo;
   if (icon === "01n") {
     tempo = `moon`;
   } else if (icon === "01d") {
@@ -218,11 +265,59 @@ function getWeatherIconForList(icon) {
   }
   return tempo;
 }
+function getEstadoDoVento(velocidade) {
+  let vento;
+  if (velocidade <= 6) {
+    vento = "Calmo";
+  } else if (velocidade <= 15) {
+    vento = "Vento Fraco";
+  } else if (velocidade <= 35) {
+    vento = "Vento Moderado";
+  } else if (velocidade <= 55) {
+    vento = "Vento Forte";
+  } else if (velocidade <= 75) {
+    vento = "Vento Muito Forte";
+  } else if (velocidade > 75) {
+    vento = "Vento Excep. Forte";
+  }
+  return vento;
+}
+
+function converterDegrausEmDirecoes(d) {
+  // Insert the amount of degrees here
+  degrees = d;
+
+  // Define array of directions
+  directions = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
+
+  // Split into the 8 directions
+  degrees = (degrees * 8) / 360;
+
+  // round to nearest integer.
+  degrees = Math.round(degrees, 0);
+
+  // Ensure it's within 0-7
+  degrees = (degrees + 8) % 8;
+
+  return directions[degrees];
+}
+
 /************      TESTES        *******************/
+
+/* GET THE MOST FREQUENT ICON OF DAY */
+function getMoreFrequent(arr) {
+  return arr
+    .sort(
+      (a, b) =>
+        arr.filter((v) => v === a).length - arr.filter((v) => v === b).length
+    )
+    .pop();
+}
+
 /* Lista estado-dias*/
 function tempoNextDays(list) {
-  const lines = document.getElementById("lines");
-  lines.innerHTML = "";
+  const line = document.getElementById("accordion");
+  line.innerHTML = "";
   const valueList = list.list;
 
   Date.prototype.addDays = function (days) {
@@ -243,7 +338,6 @@ function tempoNextDays(list) {
     let diaSemana = getWeekDay(day);
     weekDays.push(diaSemana);
   }
-  // console.log(weekDays);
 
   let diasSemana;
   for (const key in days) {
@@ -251,110 +345,158 @@ function tempoNextDays(list) {
     let maxTemp = [];
     let icons = [];
     let dia = days[key];
+    let dadosParaCartoes = [];
+    let vento;
+    let velocidadeDoVento;
+    let temperatura;
+    let dirVento;
+    let humidade;
+    let possibilidadeChuva;
     for (const i in valueList) {
       const dataHora = valueList[i].dt_txt.split(" ");
       const data = dataHora[0];
+      const hora = dataHora[1].split(":");
+      let horas = hora[0];
       diasSemana = weekDays[key];
       if (dia === data) {
         let iconFreq = valueList[i].weather[0].icon;
         let min = valueList[i].main.temp_min.toFixed(0);
         let max = valueList[i].main.temp_max.toFixed(0);
+        temperatura = valueList[i].main.temp;
+        humidade = valueList[i].main.humidity;
+        let getVento = valueList[i].wind.speed;
+        velocidadeDoVento = Math.ceil(getVento * 3.6);
+        let direcaoDoVento = valueList[i].wind.deg;
+        dirVento = converterDegrausEmDirecoes(direcaoDoVento);
+        vento = getEstadoDoVento(velocidadeDoVento);
+        possibilidadeChuva = valueList[i].pop * 100;
         minTemp.push(min);
         maxTemp.push(max);
         icons.push(iconFreq);
+        // hoursWeatherByDay(dia);
+        let icon = getWeatherIcon(iconFreq);
+        dadosParaCartoes.push([temperatura, icon, horas]);
       }
     }
-    // console.log(diasSemana);
-    // console.log(icons);
-    /* GET THE MOST FREQUENT ICON OF DAY */
-    if (icons.length === 1) {
-      item = icons[0];
-    } else {
-      var mf = 1;
-      var m = 0;
-      var item;
-      for (var i = 0; i < icons.length; i++) {
-        for (var j = i; j < icons.length; j++) {
-          if (icons[i] == icons[j]) m++;
-          if (mf < m) {
-            mf = m;
-            item = icons[i];
-          }
-        }
-        m = 0;
+    if (icons.length === 0) icons.push(respData.weather[0].icon);
+    if (minTemp.length === 0) minTemp.push(respData.main.temp_min.toFixed(0));
+    if (maxTemp.length === 0) maxTemp.push(respData.main.temp_max.toFixed(0));
+    if (humidade === undefined) humidade = respData.main.humidity;
+    if (velocidadeDoVento === undefined) {
+      velocidadeDoVento = Math.ceil(respData.wind.speed) * 3.6;
+      vento = getEstadoDoVento(velocidadeDoVento);
+    }
+    if (dirVento === undefined) {
+      let direcaoDoVento = respData.wind.deg;
+      dirVento = converterDegrausEmDirecoes(direcaoDoVento);
+    }
+    if (possibilidadeChuva === undefined) {
+      possibilidadeChuva = 100;
+      if (respData.rain === undefined) {
+        possibilidadeChuva = 0;
       }
     }
-    // console.log(item);
-    descTempo = getWeatherDesc(item);
-    icon = getWeatherIconForList(item);
+    let item = getMoreFrequent(icons);
+    let descTempo = getWeatherDesc(item);
+    const icon = getWeatherIconForList(item);
 
-    //     let icon = getWeatherIcon(weatherIcon);
     /* GET THE MOST FREQUENT ICON OF DAY */
     let minimo = Math.min(...minTemp);
     let maximo = Math.max(...maxTemp);
-    lines.innerHTML += `
-      <div class="estado-dias hoverable">
-        <div class="img-background">
-          <i class="imgtempo ${icon}"> </i> 
-        </div>
-        <p class="dia-tempo">
-          <span class="titulo-dia">${diasSemana}</span>
-          <span class="estadotempo">${descTempo}</span>
-        </p>
-        <p class="maxmin">
-          <span class="max">Max. ${maximo}ºC</span><br /><span class="min"
-            >Min. ${minimo}ºC</span
-          >
-        </p>
 
-        <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
+    line.innerHTML += `
+      <div class="container">
+        <div class="estado-dias hoverable label">
+          <div class="img-background">
+            <i class="imgtempo ${icon}"></i>
+          </div>
+          <p class="dia-tempo">
+            <span class="titulo-dia">${diasSemana}</span>
+            <span class="estadotempo">${descTempo}</span>
+          </p>
+          <p class="maxmin">
+            <span class="max">Max. ${maximo}ºC</span><br /><span class="min"
+              >Min. ${minimo}ºC</span
+            >
+          </p>
+
+          <img src="./assets/img/arrow_right.svg" alt="" class="rotate imgright" />
+        </div>
+        <div class="content">
+          <div class="left">
+            <p>Vento</p>
+            <p>Humidade</p>
+            <p>Possibilidade de Chuva</p>
+          </div>
+          <div class="right">
+            <p>${vento}, ${velocidadeDoVento}Km/h ${dirVento}</p>
+            <p>${humidade}%</p>
+            <p>${possibilidadeChuva}%</p>
+          </div>
+          <div class="cards" id="cards${[key]}">
+            
+          </div>
+        </div>
       </div>
     `;
+
+    for (const i in dadosParaCartoes) {
+      const id = "cards" + [key];
+      const cardsToPost = document.getElementById(id);
+      cardsToPost.innerHTML += `
+      <div class="micro-cards">
+        <p class="temp">${dadosParaCartoes[i][0].toFixed(0)}ºC</p>
+        <img src="${dadosParaCartoes[i][1]}" alt="" />
+        <p class="hora">${dadosParaCartoes[i][2]}H</p>
+      </div>
+      `;
+    }
+  }
+  accordion();
+}
+function hideKeyboard() {
+  //this set timeout needed for case when hideKeyborad
+  //is called inside of 'onfocus' event handler
+  setTimeout(function () {
+    //creating temp field
+    var field = document.createElement("input");
+    field.setAttribute("type", "text");
+    //hiding temp field from peoples eyes
+    //-webkit-user-modify is nessesary for Android 4.x
+    field.setAttribute(
+      "style",
+      "position:absolute; top: 0px; opacity: 0; -webkit-user-modify: read-write-plaintext-only; left:0px;"
+    );
+    document.body.appendChild(field);
+
+    //adding onfocus event handler for out temp field
+    field.onfocus = function () {
+      //this timeout of 200ms is nessasary for Android 2.3.x
+      setTimeout(function () {
+        field.setAttribute("style", "display:none;");
+        setTimeout(function () {
+          document.body.removeChild(field);
+          document.body.focus();
+        }, 14);
+      }, 200);
+    };
+    //focusing it
+    field.focus();
+  }, 50);
+}
+/************      FIM TESTES        *******************/
+
+/*  Load Accordion  */
+
+function accordion() {
+  const accordion = document.getElementsByClassName("container");
+
+  for (i = 0; i < accordion.length; i++) {
+    accordion[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+    });
   }
 }
-
-// function tempoNextDays(list) {
-//   console.log(days);
-//   console.log(weekDays);
-
-//   for (const key in valueList) {
-//     const dataHora = valueList[key].dt_txt.split(" ");
-//     const horaCompleta = dataHora[1].split(":");
-//     const data = dataHora[0];
-//     let minTemp = [];
-//     let maxTemp = [];
-//     if (data === days[0]) {
-//       let min = valueList[key].main.temp_min.toFixed(0);
-//       let max = valueList[key].main.temp_max.toFixed(0);
-//       minTemp.push(min);
-//       maxTemp.push(max);
-//       console.log(minTemp);
-//     }
-//     const weatherIcon = valueList[key].weather[0].icon;
-//     let icon = getWeatherIcon(weatherIcon);
-//     // console.log(valueList[key].weather);
-//     let diaSemana;
-//     lines.innerHTML += `
-//     <div class="estado-dias hoverable">
-//       <div class="img-background">
-//         <i class="imgtempo sun"> </i>
-//       </div>
-//       <p class="dia-tempo">
-//         <span class="titulo-dia">${diaSemana}</span>
-//         <span class="estadotempo">Sol</span>
-//       </p>
-//       <p class="maxmin">
-//         <span class="max">Max. 24ºC</span><br /><span class="min"
-//           >Min. 15ºC</span
-//         >
-//       </p>
-
-//       <img src="./assets/img/arrow_right.svg" alt="" class="imgright" />
-//     </div>
-//   `;
-//   }
-
-/************      FIM TESTES        *******************/
 
 /* Armazenar ultima cidade pesquisada */
 function salvarCidade(city) {
@@ -373,4 +515,9 @@ function adicionaCidadeSalva() {
 }
 adicionaCidadeSalva();
 
-function dailyWeather() {}
+function weatherForTheDay(day) {
+  const btnBack = document.getElementById("back");
+  btnBack.addEventListener("click", (e) => {
+    history.back();
+  });
+}
