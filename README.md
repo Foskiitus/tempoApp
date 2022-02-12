@@ -12,4 +12,4 @@ No data is automatically collected and sent by the apps by default. Weather App 
 
 ## Permissions
 
-The apps use several permissions which are required for Weather to work correctly - this includes GPS data, WiFi access (for connecting to WiFi adapters).
+The apps use several permissions which are required for Weather to work correctly - this includes WiFi access (for connecting to WiFi adapters).
