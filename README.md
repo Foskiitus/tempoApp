@@ -4,7 +4,7 @@ Mais uma aplicação de Metereologia
 
 ## Privacy policy
 
-This is the privacy policy for Weather Open-IPMA app
+This is the privacy policy for TempoApp(pt.rlopes.tempo)
 
 Your data is your own - none of this data will be shared with other parties without your consent.
 
