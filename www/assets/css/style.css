@@ -485,10 +485,14 @@ input:focus {
 }
 .content .left {
   grid-area: left;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .content .right {
   grid-area: right;
+  font-size: 12px;
+  font-weight: 300;
 }
 
 .content > .cards {

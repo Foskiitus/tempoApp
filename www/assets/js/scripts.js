@@ -42,7 +42,7 @@ function getProbabilidadeChuva(proba) {
   proba = proba * 100;
   const prob = document.querySelector(".text > .prob");
   prob.innerHTML = '<i class="fas fa-umbrella"></i>';
-  prob.innerHTML += " " + proba + "%";
+  prob.innerHTML += " " + proba.toFixed(0) + "%";
 }
 if (form === null) {
 } else {
@@ -304,6 +304,29 @@ function converterDegrausEmDirecoes(d) {
 
 /************      TESTES        *******************/
 
+/* GET WORST WEATHER ICON */
+function getWorstWeatherIcon(arr){
+  if(arr.includes('11n')) return '11n';
+  if(arr.includes('11d')) return '11d';
+  if(arr.includes('13n')) return '13n';
+  if(arr.includes('13d')) return '13d';
+  if(arr.includes('10n')) return '10n';
+  if(arr.includes('10d')) return '10d';
+  if(arr.includes('09n')) return '09n';
+  if(arr.includes('09d')) return '09d';
+  if(arr.includes('04n')) return '04n';
+  if(arr.includes('04d')) return '04d';
+  if(arr.includes('03n')) return '03n';
+  if(arr.includes('03d')) return '03d';
+  if(arr.includes('02n')) return '02n';
+  if(arr.includes('02d')) return '02d';
+  if(arr.includes('50n')) return '50n';
+  if(arr.includes('50d')) return '50d';
+  if(arr.includes('01d')) return '01d';
+  if(arr.includes('01n')) return '01n';
+  
+}
+
 /* GET THE MOST FREQUENT ICON OF DAY */
 function getMoreFrequent(arr) {
   return arr
@@ -351,7 +374,7 @@ function tempoNextDays(list) {
     let temperatura;
     let dirVento;
     let humidade;
-    let possibilidadeChuva;
+    let possibilidadeChuva = [];
     for (const i in valueList) {
       const dataHora = valueList[i].dt_txt.split(" ");
       const data = dataHora[0];
@@ -369,7 +392,8 @@ function tempoNextDays(list) {
         let direcaoDoVento = valueList[i].wind.deg;
         dirVento = converterDegrausEmDirecoes(direcaoDoVento);
         vento = getEstadoDoVento(velocidadeDoVento);
-        possibilidadeChuva = valueList[i].pop * 100;
+        let probChuva = valueList[i].pop * 100;
+        possibilidadeChuva.push(probChuva.toFixed(0));
         minTemp.push(min);
         maxTemp.push(max);
         icons.push(iconFreq);
@@ -377,6 +401,7 @@ function tempoNextDays(list) {
         let icon = getWeatherIcon(iconFreq);
         dadosParaCartoes.push([temperatura, icon, horas]);
       }
+      
     }
     if (icons.length === 0) icons.push(respData.weather[0].icon);
     if (minTemp.length === 0) minTemp.push(respData.main.temp_min.toFixed(0));
@@ -396,13 +421,15 @@ function tempoNextDays(list) {
         possibilidadeChuva = 0;
       }
     }
-    let item = getMoreFrequent(icons);
+    let item = getWorstWeatherIcon(icons);
     let descTempo = getWeatherDesc(item);
     const icon = getWeatherIconForList(item);
 
     /* GET THE MOST FREQUENT ICON OF DAY */
     let minimo = Math.min(...minTemp);
     let maximo = Math.max(...maxTemp);
+    let probChuvaValor = Math.max(...possibilidadeChuva);
+    if(probChuvaValor === -Infinity) probChuvaValor = 0;
 
     line.innerHTML += `
       <div class="container">
@@ -431,7 +458,7 @@ function tempoNextDays(list) {
           <div class="right">
             <p>${vento}, ${velocidadeDoVento}Km/h ${dirVento}</p>
             <p>${humidade}%</p>
-            <p>${possibilidadeChuva}%</p>
+            <p>${probChuvaValor}%</p>
           </div>
           <div class="cards" id="cards${[key]}">
             
